@@ -1,0 +1,10 @@
+.parent {
+    margin: 12px;
+    border: 1px solid rgb(218, 217, 217);
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.spacer {
+    height: 12px;
+}
