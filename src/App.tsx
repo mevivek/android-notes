@@ -1,11 +1,15 @@
 import './App.css'
-import AndroidQnA from './android/AndroidQnA'
+import QnAa from './qnas/QnAs'
+import useParseTxtFile from './utility/data-store'
 
 function App() {
+  const { loading } = useParseTxtFile()
   return (
-    <div style={{ alignContent: 'center', justifyContent: 'center', display: 'flex' }}>
-      <AndroidQnA />
-    </div>
+    <>
+      {loading ? <div>Loading...</div> : <div style={{ alignContent: 'center', justifyContent: 'center', display: 'flex' }}>
+        <QnAa />
+      </div>}
+    </>
   )
 }
 

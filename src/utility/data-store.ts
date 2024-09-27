@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import QuestionAndAnswer from '../models/QuestionAndAnswer';
 
-export const tags: string[] = []
+const filePath = "data/questions.txt"
 
-export const questions: QuestionAndAnswer[] = []
+export var tags: string[] = []
 
-const useParseTxtFile = (filePath: string) => {
-  const [data, setData] = useState<QuestionAndAnswer[]>([]);
+export var questions: QuestionAndAnswer[] = []
+
+const useParseTxtFile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,8 +20,8 @@ const useParseTxtFile = (filePath: string) => {
           throw new Error(`Error fetching the file: ${response.statusText}`);
         }
         const text = await response.text();
-        const parsedData = parseData(text);
-        setData(parsedData);
+        questions = parseData(text);
+        tags = [...new Set(questions.flatMap(question => question.tags || []))];
         setLoading(false);
       } catch (err: any) {
         setError(err.message);
@@ -53,7 +54,8 @@ const useParseTxtFile = (filePath: string) => {
 
       // Extract optional tags
       const tagsMatch = block.match(/#T([\s\S]*)/);
-      if (tagsMatch) obj.tags = tagsMatch[1]?.trim().split(/\s+/);
+      if (tagsMatch) obj.tags = tagsMatch[1]?.trim().split(/, /)
+        ;
 
       console.log(obj);
 
@@ -61,7 +63,7 @@ const useParseTxtFile = (filePath: string) => {
     });
   };
 
-  return { data, loading, error };
+  return { loading, error };
 };
 
 export default useParseTxtFile;
