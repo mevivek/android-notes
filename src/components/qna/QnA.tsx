@@ -1,15 +1,10 @@
 import React from 'react';
 import styles from './QnA.module.css';
 import { FaPlay } from 'react-icons/fa6';
-import Markdown from 'react-markdown';
+import QuestionAndAnswer from '../../models/QuestionAndAnswer';
+import MyMarkdown from '../MyMarkdown';
 
-interface QnAProps {
-  question: string;
-  answer: string;
-  explanation: string;
-}
-
-export default function QnA({ question, answer, explanation }: QnAProps) {
+export default function QnA({ question, answer, explanation }: QuestionAndAnswer) {
 
   const [isExpanded, setIsExpanded] = React.useState(false);
 
@@ -28,8 +23,8 @@ export default function QnA({ question, answer, explanation }: QnAProps) {
         </div>
         <div style={{ marginLeft: '8px' }}>
           <div className={styles.answer}>{answer}</div>
-          {isExpanded && <div className={styles.explanation}>
-            <Markdown>{explanation}</Markdown>
+          {explanation && isExpanded && <div className={styles.explanation}>
+            <MyMarkdown>{explanation}</MyMarkdown>
           </div>}
         </div>
       </div>

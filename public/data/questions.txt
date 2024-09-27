@@ -1,0 +1,139 @@
+#Q
+What is Android?
+
+#A
+Android is a mobile operating system developed by Google, based on a modified version of the Linux kernel and other open-source software. It's primarily designed for touchscreen mobile devices such as smartphones and tablets. However, it is also used in various other devices like TVs (Android TV), cars (Android Auto), and wearables (Wear OS).
+
+#E
+**Key points about Android**
+
+1. **Open-Source Nature**: Android is an open-source platform, meaning its source code is available for modification and distribution by anyone. This has led to its widespread adoption and customization by various manufacturers.
+2. **Architecture**: Android is built on a Linux kernel and follows a layered architecture consisting of the Linux kernel, libraries, Android Runtime (ART), application framework, and applications. Understanding this architecture is crucial for developers.
+3. **Java/Kotlin**: Traditionally, Android apps were developed using Java. However, Google officially supports Kotlin as the preferred language since 2017. Proficiency in either or both of these languages is often required for Android development roles.
+4. **Android SDK and Tools**: The Android Software Development Kit (SDK) provides the tools necessary to develop Android applications. It includes a debugger, libraries, a handset emulator, documentation, sample code, and tutorials. Familiarity with Android Studio, the official IDE for Android development, is also essential.
+5. **Fragmentation**: Due to the variety of devices and Android versions in the market, developers must be aware of fragmentation issues. This includes different screen sizes, hardware configurations, and OS versions, which can affect app performance and user experience.
+6. **Lifecycle Management**: Android applications have a unique lifecycle, managed by the operating system. Understanding the Activity lifecycle (onCreate, onStart, onResume, onPause, onStop, onDestroy) is critical, especially for managing resources effectively.
+7. **Security**: Android has various security features, such as sandboxing applications, permissions system, encryption, and more. Knowledge of these aspects is important for developing secure applications.
+8. **Google Play Store**: Android apps are typically distributed through the Google Play Store. Understanding the app submission process, monetization strategies, and guidelines for publishing is useful.
+9. **Updates and Support**: Mentioning the importance of keeping up with the latest Android updates, APIs, and best practices is crucial for showing that you are up-to-date with the Android ecosystem.
+
+In summary, Android is a versatile and widely-used mobile operating system with a strong emphasis on customization, open-source development, and a broad range of applications across different devices. Being well-versed in Android's architecture, development tools, and best practices is essential for any developer looking to succeed in an Android-related role.
+
+#T
+Android
+
+#Q
+What is the difference between MVVM and MVP in Android?
+
+#A
+The Model-View-ViewModel (MVVM) and Model-View-Presenter (MVP) are both architectural design patterns used in software development, particularly for organizing code in applications with user interfaces. Although they share some similarities, they differ in terms of how they handle the separation of concerns and the flow of data.
+
+#E
+### **MVVM (Model-View-ViewModel)**
+
+1. **Components**:
+    - **Model**: Represents the data and business logic of the application.
+    - **View**: Represents the user interface (UI) elements, like buttons, text fields, etc.
+    - **ViewModel**: Acts as an intermediary between the View and the Model. It holds and processes data for the View, exposing it through properties and commands that the View can bind to.
+2. **Data Binding**:
+    - MVVM heavily relies on data binding, which allows automatic synchronization between the View and the ViewModel. When data changes in the ViewModel, the UI automatically updates, and vice versa.
+3. **Communication**:
+    - The View directly binds to the ViewModel, with minimal code-behind in the View. The ViewModel communicates with the Model to retrieve or manipulate data, and it updates the View via data binding.
+4. **Use Case**:
+    - MVVM is widely used in frameworks like Android with Jetpack Compose and data binding libraries, as well as in WPF and Xamarin. It's particularly useful when there's a need for clean separation between the UI and the logic, with strong support for data binding.
+5. **Advantages**:
+    - Clear separation of concerns.
+    - Easier unit testing of the ViewModel.
+    - Reduced boilerplate code due to data binding.
+6. **Disadvantages**:
+    - Can become complex, especially with extensive data binding.
+    - Overhead of setting up data binding in platforms that don’t natively support it.
+
+### **MVP (Model-View-Presenter)**
+
+1. **Components**:
+    - **Model**: Handles the data and business logic, similar to MVVM.
+    - **View**: Displays the data and reacts to user interactions. It is usually implemented as an interface.
+    - **Presenter**: Acts as an intermediary between the View and the Model. It retrieves data from the Model, applies the logic, and updates the View.
+2. **Data Binding**:
+    - MVP does not rely on data binding. The View explicitly calls methods on the Presenter to retrieve data, and the Presenter directly updates the View through its interface.
+3. **Communication**:
+    - The View is passive and communicates with the Presenter, which handles the logic. The Presenter fetches data from the Model and updates the View accordingly. The View and Presenter communicate through well-defined interfaces.
+4. **Use Case**:
+    - MVP is commonly used in Android applications, especially before the introduction of Jetpack components, and in platforms without native support for data binding, like web applications.
+5. **Advantages**:
+    - Clear separation of concerns.
+    - Easier to test the Presenter logic.
+    - Flexibility in choosing how to update the View.
+6. **Disadvantages**:
+    - Can lead to "Presenter bloat" if too much logic is handled in the Presenter.
+    - More boilerplate code due to the lack of data binding.
+
+### **Key Differences**:
+
+- **Data Binding**: MVVM leverages data binding to connect the View and ViewModel, reducing the amount of glue code. MVP typically does not use data binding, and the Presenter must manually update the View.
+- **Responsibility**: In MVVM, the ViewModel is responsible for exposing data and handling UI logic, while the View simply binds to this data. In MVP, the Presenter actively controls the View, dictating what should be displayed and how the UI should react.
+- **View’s Role**: In MVVM, the View is often "dumb" and does minimal work, mostly binding to the ViewModel. In MVP, the View might have more logic, interacting with the Presenter more directly.
+- **Complexity**: MVVM can become more complex due to data binding mechanisms, whereas MVP can lead to more verbose code due to the need for explicit View-Presenter interactions.
+
+In summary, MVVM is more suitable for platforms that support data binding, allowing for a more reactive UI, while MVP is better for environments where data binding is not natively supported, offering more control but at the cost of potentially more boilerplate code.
+
+#Q
+What is the difference between `setValue()` and `postValue()` in LiveData?
+
+#A
+The difference between `setValue()` and `postValue()` in LiveData lies in how and when the value is updated. `setValue()` updates the LiveData's value immediately on the main thread, while `postValue()` schedules the update to occur asynchronously, often used when updating LiveData from a background thread.
+
+#E
+**1. `setValue()`**:
+
+- **Thread**: Must be called on the main (UI) thread.
+- **Immediate Update**: It immediately updates the value held by the LiveData and notifies active observers of the change.
+- **Use Case**: Typically used when you are sure that you are on the main thread, such as in UI-related logic or directly within the ViewModel.
+
+**Example**:
+
+```kotlin
+liveData.setValue(newValue)
+```
+
+- Here, `newValue` is set immediately, and any observers of this LiveData will be notified right away.
+
+**2. `postValue()`**:
+
+- **Thread**: Can be called from any thread, including background threads.
+- **Asynchronous Update**: It posts the update to the main thread, meaning the change will be applied asynchronously at a later time. It’s useful when working with background threads to avoid thread-safety issues.
+- **Use Case**: Ideal for updating LiveData from background threads, such as when performing network operations or heavy computations.
+
+**Example**:
+
+```kotlin
+liveData.postValue(newValue)
+```
+
+- This schedules the value change to occur on the main thread, but the observers are notified only after the main thread processes the update.
+
+**Key Differences**:
+
+- **Threading**: `setValue()` is synchronous and must be used on the main thread, whereas `postValue()` is asynchronous and can be safely used on any thread.
+- **Execution Timing**: `setValue()` triggers an immediate update, while `postValue()` queues the update to be processed later by the main thread, which can result in slight delays depending on when the main thread is free to process it.
+
+#T
+Android
+
+#Q
+Explain launch modes in Android with different scenarios.
+
+#A
+Android supports several launch modes like standard, singleTop, singleTask, and singleInstance to handle how activities are launched and managed in the back stack.
+
+#E
+- `standard`: Default mode, new instance is created.
+- `singleTop`: If an instance already exists at the top, no new instance is created.
+- `singleTask`: If an instance exists in the task, it is brought to the front and cleared above it.
+- `singleInstance`: Always a single instance in a separate task.
+
+```xml
+<activity android:name=".MyActivity"
+		  android:launchMode="standard" />
+```
