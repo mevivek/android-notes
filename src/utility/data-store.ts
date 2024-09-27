@@ -7,6 +7,14 @@ export var tags: string[] = []
 
 export var questions: QuestionAndAnswer[] = []
 
+export const tagColors = {
+  "android": "#3DDC84",   // Android green
+  "jetpack": "#4285F4",    // Jetpack blue (Google-like color)
+  "kotlin": "#7F52FF",     // Kotlin purple
+  "hilt": "#00574B",       // Hilt green (similar to dependency injection frameworks)
+  "DI": "#FF6F00"          // Dependency Injection orange
+}
+
 const useParseTxtFile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

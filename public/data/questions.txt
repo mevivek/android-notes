@@ -400,7 +400,7 @@ How work manager work?
 TODO
 
 #Q
-What is the difference between Hilt @Provides and @Binds?
+What is the difference between Hilt `@Provides` and `@Binds`?
 
 #A
 TODO
@@ -422,7 +422,7 @@ Dispatcher.Default, Dispatcher.Main, Dispatcher.IO
 `Dispatchers.IO` is designed for offloading blocking IO tasks to a shared pool of threads. It is optimized for operations like network requests, file I/O, or database operations, where the tasks are mostly waiting for external resources and not CPU-intensive. This allows for efficient management of resources by freeing up the main thread for other work.
 
 #T
-kotlin, couroutines
+kotlin, coroutines
 
 #Q
 What is difference between SharedPreferences and DataStore?
@@ -474,3 +474,123 @@ In summary, `DataStore` is the preferred choice for modern Android applications 
 #T
 android, jetpack, dataStore
 
+#Q
+What is inline function in kotlin?
+
+#A
+An inline function in Kotlin is a function marked with the inline keyword, which helps to reduce the overhead of function calls by replacing the function call with the actual code of the function. This is particularly useful for functions that take lambda expressions as parameters.
+
+#E
+**Example:**
+
+```kotlin
+inline fun inlineFunction(action: () -> Unit) {
+    println("Before action")
+    action()
+    println("After action")
+}
+
+fun main() {
+    inlineFunction {
+        println("This is the action")
+    }
+}
+
+```
+
+In this example, the `inlineFunction` is an inline function that takes a lambda expression `action` as a parameter. When `inlineFunction` is called in the `main` function, the compiler replaces the call with the actual code inside `inlineFunction`.
+
+#T
+kotlin
+
+#Q
+What is higher order function?
+
+#A
+A function that takes a function as a parameter and returns a function.
+
+#T
+kotlin
+
+#Q
+What is the difference between sealed class and `enum` class?
+
+#A
+`enum` class has constant values and parameters while sealed class can have multiple instances and runtime parameter values.`
+
+#T
+kotlin
+
+#Q
+What is the use of coroutines in Kotlin?
+
+#A
+Coroutines in Kotlin are used to simplify asynchronous programming by allowing you to write asynchronous code in a sequential and more readable manner. They help in managing long-running tasks, such as network calls or heavy computations, without blocking the main thread, making your applications more responsive and efficient.
+
+#E
+1. **What are Coroutines?**:
+    
+    Coroutines are a feature in Kotlin that provide a way to write asynchronous, non-blocking code in a more natural and sequential style. They are similar to lightweight threads but more efficient, as they avoid the overhead of traditional threads.
+    
+2. **How Coroutines Work**:
+    
+    **Suspending Functions**: Coroutines are built around the concept of suspending functions, which can pause their execution without blocking the thread they're running on. When a suspending function is called, the coroutine may be suspended and resumed later, allowing other work to be done in the meantime.
+    
+    **CoroutineScope**: Coroutines run within a CoroutineScope, which defines the lifecycle and context for the coroutines. This helps in controlling when the coroutine should be canceled or completed.
+    
+
+**Example**:
+
+```kotlin
+fun main() = runBlocking {
+    launch {
+        delay(1000L) // suspends the coroutine for 1 second
+        println("Hello from Coroutine!")
+    }
+    println("Hello from Main!")
+}
+```
+
+- **Explanation**: In this example, `runBlocking` is a coroutine builder that starts the coroutine and blocks the main thread until the coroutine completes. The `launch` builder creates a new coroutine within the scope. The `delay` function suspends the coroutine for 1 second without blocking the thread, allowing other coroutines to run.
+1. **Use Cases**:
+    
+    **Asynchronous Programming**: Coroutines simplify the process of writing asynchronous code, such as making network requests, reading from or writing to a database, or performing I/O operations, without blocking the main thread.
+    
+    **Concurrency**: Coroutines can be used to perform concurrent tasks, such as executing multiple network calls simultaneously, and then combining the results.
+    
+    **Structured Concurrency**: Kotlin coroutines provide structured concurrency, which means that coroutines are organized and managed within a defined scope, helping to prevent memory leaks and manage the lifecycle of tasks effectively.
+    
+2. **Advantages**:
+    
+    **Lightweight**: Coroutines are much lighter than traditional threads, which means you can create thousands of coroutines without significant overhead.
+    
+    **Simplified Code**: By allowing you to write asynchronous code in a sequential manner, coroutines reduce the complexity typically associated with callback-based asynchronous programming.
+    
+    **Better Error Handling**: Coroutines provide structured error handling, allowing you to handle exceptions more gracefully compared to traditional asynchronous approaches.
+    
+3. **Key Coroutine Builders**:
+    
+    **`launch`**: Starts a new coroutine without blocking the current thread and is used when no result is expected.
+    
+    **`async`**: Similar to `launch` but is used when a result is expected, allowing you to perform concurrent operations and combine their results.
+    
+- **`runBlocking`**: Blocks the current thread until the coroutine completes. It's usually used for testing or in main functions.
+
+**Example**:
+
+```kotlin
+fun main() = runBlocking {
+    val result = async { fetchData() }
+    println("Data: ${result.await()}")
+}
+
+suspend fun fetchData(): String {
+    delay(1000L)
+    return "Sample Data"
+}
+```
+
+- **Explanation**: In this example, `async` starts a coroutine that fetches data asynchronously. The `await` function suspends the coroutine until the result is available, allowing the code to be written in a sequential, easy-to-understand manner.
+
+#T
+kotlin, coroutines

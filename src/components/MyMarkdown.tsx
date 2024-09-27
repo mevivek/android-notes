@@ -19,7 +19,7 @@ export default function MyMarkdown({ children }: { children: string }) {
             style={style}
           />
         ) : (
-          <code {...rest} className={className}>
+          <code {...rest} className={className} style={{ textAlign: 'center', lineHeight: 1, backgroundColor: '#00000010', color: 'red', padding: '2px 4px', borderRadius: '4px' }}>
             {children}
           </code>
         )

@@ -14,20 +14,24 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    font-size: small;
 }
 
 .tag {
+    cursor: pointer;
     text-align: center;
     padding: 0 8px;
     background-color: bisque;
     border-radius: 16px;
+    color: whitesmoke;
 }
+
 
 @media (max-width: 600px) {
     .parent {
         max-width: unset;
         border: unset;
-        padding: 8px;
+        padding: 0;
         border-radius: unset;
     }
 }

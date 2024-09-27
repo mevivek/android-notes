@@ -1,0 +1,109 @@
+/* Unselected State */
+.android {
+    color: #3DDC84;  /* Text color uses the original background color */
+    background-color: transparent;
+    border: 2px solid #3DDC84;  /* Stroke with original color */
+}
+
+.jetpack {
+    color: #4285F4;
+    background-color: transparent;
+    border: 2px solid #4285F4;
+}
+
+.kotlin {
+    color: #7F52FF;
+    background-color: transparent;
+    border: 2px solid #7F52FF;
+}
+
+.hilt {
+    color: #00574B;
+    background-color: transparent;
+    border: 2px solid #00574B;
+}
+
+.di {
+    color: #FF6F00;
+    background-color: transparent;
+    border: 2px solid #FF6F00;
+}
+
+.general {
+    color: #B0BEC5;
+    background-color: transparent;
+    border: 2px solid #B0BEC5;
+}
+
+.coroutines {
+    color: #00BCD4;
+    background-color: transparent;
+    border: 2px solid #00BCD4;
+}
+
+.room {
+    color: #8BC34A;
+    background-color: transparent;
+    border: 2px solid #8BC34A;
+}
+
+.datastore {
+    color: #FF9800;
+    background-color: transparent;
+    border: 2px solid #FF9800;
+}
+
+/* Selected State */
+.android.selected {
+    color: #FFFFFF;  /* White text */
+    background-color: #3DDC84;  /* Original background color now used */
+    border: 2px solid transparent;
+}
+
+.jetpack.selected {
+    color: #FFFFFF;
+    background-color: #4285F4;
+    border: 2px solid transparent;
+}
+
+.kotlin.selected {
+    color: #FFFFFF;
+    background-color: #7F52FF;
+    border: 2px solid transparent;
+}
+
+.hilt.selected {
+    color: #FFFFFF;
+    background-color: #00574B;
+    border: 2px solid transparent;
+}
+
+.di.selected {
+    color: #FFFFFF;
+    background-color: #FF6F00;
+    border: 2px solid transparent;
+}
+
+.general.selected {
+    color: #FFFFFF;
+    background-color: #B0BEC5;
+    border: 2px solid transparent;
+}
+
+.coroutines.selected {
+    color: #FFFFFF;
+    background-color: #00BCD4;
+    border: 2px solid transparent;
+}
+
+.room.selected {
+    color: #FFFFFF;
+    background-color: #8BC34A;
+    border: 2px solid transparent;
+}
+
+.datastore.selected {
+    color: #FFFFFF;
+    background-color: #FF9800;
+    border: 2px solid transparent;
+}
