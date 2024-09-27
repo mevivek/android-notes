@@ -22,3 +22,12 @@
     background-color: bisque;
     border-radius: 16px;
 }
+
+@media (max-width: 600px) {
+    .parent {
+        max-width: unset;
+        border: unset;
+        padding: 8px;
+        border-radius: unset;
+    }
+}

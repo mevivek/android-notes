@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/assets/data/questions.ts","./src/components/MyMarkdown.tsx","./src/components/Spacer.tsx","./src/components/qna/QnA.tsx","./src/models/QuestionAndAnswer.ts","./src/qnas/QnAs.tsx","./src/utility/data-store.ts"],"version":"5.6.2"}

@@ -1,6 +1,6 @@
 import Markdown from 'react-markdown';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneLight as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { lucario as style } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export default function MyMarkdown({ children }: { children: string }) {
   return <Markdown
@@ -14,6 +14,8 @@ export default function MyMarkdown({ children }: { children: string }) {
             PreTag="div"
             children={String(children).replace(/\n$/, '')}
             language={match[1]}
+            wrapLines={true}
+            wrapLongLines={true}
             style={style}
           />
         ) : (
