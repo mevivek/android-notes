@@ -20,7 +20,7 @@ Android is a mobile operating system developed by Google, based on a modified ve
 In summary, Android is a versatile and widely-used mobile operating system with a strong emphasis on customization, open-source development, and a broad range of applications across different devices. Being well-versed in Android's architecture, development tools, and best practices is essential for any developer looking to succeed in an Android-related role.
 
 #T
-Android
+android
 
 #Q
 What is the difference between MVVM and MVP in Android?
@@ -78,6 +78,9 @@ The Model-View-ViewModel (MVVM) and Model-View-Presenter (MVP) are both architec
 
 In summary, MVVM is more suitable for platforms that support data binding, allowing for a more reactive UI, while MVP is better for environments where data binding is not natively supported, offering more control but at the cost of potentially more boilerplate code.
 
+#T
+android
+
 #Q
 What is the difference between `setValue()` and `postValue()` in LiveData?
 
@@ -119,7 +122,7 @@ liveData.postValue(newValue)
 - **Execution Timing**: `setValue()` triggers an immediate update, while `postValue()` queues the update to be processed later by the main thread, which can result in slight delays depending on when the main thread is free to process it.
 
 #T
-Android
+android
 
 #Q
 Explain launch modes in Android with different scenarios.
@@ -137,3 +140,337 @@ Android supports several launch modes like standard, singleTop, singleTask, and 
 <activity android:name=".MyActivity"
 		  android:launchMode="standard" />
 ```
+
+#T
+android
+
+#Q
+What is Room Database?
+
+#A
+Room is an Android persistence library that provides an abstraction layer over SQLite to simplify database access and management. It offers a more efficient and easier way to interact with the database by using annotations, while also providing compile-time verification of SQL queries, reducing boilerplate code, and ensuring a robust data layer.
+
+#E
+1. **Overview**:
+    
+    Room is part of Android's Jetpack libraries and is designed to replace the traditional use of SQLite with a more modern, robust, and easy-to-use approach. It abstracts the complexities of raw SQL and provides a powerful ORM (Object-Relational Mapping) solution for Android development.
+    
+2. **Key Components**:
+    
+    **Entity**: Represents a table in the database. Each entity is a Kotlin/Java class annotated with `@Entity`, and its fields represent the columns of the table.
+    
+    **DAO (Data Access Object)**: Defines methods to interact with the database. Methods are annotated with SQL queries (`@Query`, `@Insert`, `@Update`, `@Delete`), and Room generates the necessary implementation.
+    
+    **Database**: The main access point to the database. It’s an abstract class annotated with `@Database` that extends `RoomDatabase`. It holds a reference to the DAOs and manages database instances.
+    
+
+**Example**:
+
+```kotlin
+@Entity
+data class User(
+    @PrimaryKey val uid: Int,
+    @ColumnInfo(name = "first_name") val firstName: String?,
+    @ColumnInfo(name = "last_name") val lastName: String?
+)
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM user")
+    fun getAll(): List<User>
+
+    @Insert
+    fun insertAll(vararg users: User)
+}
+
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+```
+
+- **Explanation**: In this example, `User` is an entity representing a table. `UserDao` is a DAO interface defining methods to interact with the `User` table. `AppDatabase` is the database class that binds everything together and provides a method to access the `UserDao`.
+1. **Features of Room**:
+    
+    **Compile-time Verification**: Room checks SQL queries at compile-time, catching errors early and providing type safety.
+    
+    **Simplified Database Interaction**: By using annotations and Kotlin/Java classes, Room reduces the boilerplate code associated with setting up and managing an SQLite database.
+    
+    **Migration Support**: Room provides tools to manage and apply database migrations safely, ensuring data integrity when the database schema changes.
+    
+    **LiveData and Flow Integration**: Room seamlessly integrates with LiveData and Flow, making it easier to work with reactive programming in Android.
+    
+2. **Advantages**:
+    
+    **Type Safety**: Compile-time verification ensures that SQL queries are correct and match the database schema, reducing runtime errors.
+    
+    **Ease of Use**: Room abstracts the complexities of raw SQL and SQLiteOpenHelper, making database operations simpler and more intuitive.
+    
+    **Integration with Other Jetpack Components**: Room works well with other Jetpack components like ViewModel, LiveData, and Paging, allowing for more cohesive and maintainable architecture.
+
+#T
+android
+
+#Q
+How does Room handle database migrations?
+
+#A
+Room handles database migrations through the use of Migration classes. These classes define how to update the database schema from one version to another. Here's how it works:
+
+- Define a Migration class for each version change, specifying the SQL statements needed to modify the database schema.
+- Add these migrations to the database builder when creating the Room database instance.
+- Room automatically applies the appropriate migrations when the database version changes, ensuring smooth updates without data loss.
+
+#E
+**Example:**
+
+```kotlin
+// Define a migration from version 1 to 2
+val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE User ADD COLUMN age INTEGER")
+    }
+}
+
+// Create database with migration
+val database = Room.databaseBuilder(
+    applicationContext,
+    AppDatabase::class.java,
+    "database-name"
+)
+.addMigrations(MIGRATION_1_2)
+.build()
+```
+
+In this example, we define a migration that adds an 'age' column to the User table when upgrading from version 1 to 2. The migration is then added to the database builder, ensuring it's applied when necessary.
+
+#T
+android
+
+#Q
+What are the types of intents in Android?
+
+#A
+**Explicit Intent:** Used to start a specific component.
+
+**Implicit Intent:** Used to start a component that can handle the desired action.
+
+#T
+android
+
+#Q
+What is Intent flags?
+
+#A
+Details
+
+#E
+Intent flags in Android are used to modify the behavior of an `Intent` when it launches an activity. They can influence how activities are managed in the back stack and how new tasks are created. Some common intent flags include:
+
+- `FLAG_ACTIVITY_NEW_TASK`: Starts the activity in a new task.
+- `FLAG_ACTIVITY_CLEAR_TOP`: If the activity being launched is already running in the current task, this flag will bring it to the front and clear all the activities on top of it.
+- `FLAG_ACTIVITY_SINGLE_TOP`: If the activity being launched is already at the top of the task, it will not be recreated, but its `onNewIntent` method will be called instead.
+- `FLAG_ACTIVITY_CLEAR_TASK`: Clears any existing task that would be associated with the activity before it is started.
+- `FLAG_ACTIVITY_NO_HISTORY`: The new activity will not be kept in the history stack.
+
+These flags provide ways to control the task and activity stack behavior, which is useful in certain navigation and workflow scenarios.
+
+```kotlin
+val intent = Intent(this, SecondActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+startActivity(intent)
+```
+
+In this example, `SecondActivity` will start in a new task, and any existing task associated with it will be cleared before it starts.
+
+#T
+android
+
+#Q
+How can we send data from one app to another in Android?
+
+#A
+You can use Intents with putExtra to pass data and start another app that can handle the received intent.
+
+#T
+android
+
+#Q
+What are Broadcast Receivers in Android?
+
+#A
+Broadcast Receivers are components that respond to system-wide broadcast announcements.
+
+#T
+android
+
+#Q
+What are the basic OOPs concepts?
+
+#A
+The basic Object-Oriented Programming (OOP) concepts are Encapsulation, Inheritance, Polymorphism, and Abstraction. These principles help organize code into reusable and manageable components, enhancing modularity and maintainability.
+
+#E
+**Encapsulation**
+
+**Inheritance**
+
+**Polymorphism**
+
+**Abstraction**
+
+#T
+general
+
+#Q
+What is the difference between Flow and LiveData in Android?
+
+#A
+Flow and LiveData are both used for observing data changes in Android, but they have some key differences:
+
+- Flow is a part of Kotlin coroutines and is cold, meaning it only emits values when collected. LiveData is lifecycle-aware and hot, emitting updates to all active observers.
+- Flow provides more flexibility with operators for data manipulation, while LiveData is simpler and automatically handles lifecycle concerns.
+- Flow can be used in any Kotlin project, whereas LiveData is specific to Android and part of the Architecture Components.
+
+#T
+android
+
+#Q
+Difference between StateFlow and ShareFlow.
+
+#A
+TODO
+
+#T
+android
+
+#Q
+How do you get data from running background tasks in Android?
+
+#A
+We can use LiveData, ViewModel, WorkManager, or Service to handle and get data from background tasks.
+
+#T
+android
+
+#Q
+What is the advantage of ViewModel in Android?
+
+#A
+ViewModel is designed to store and manage UI-related data in a lifecycle-conscious way, ensuring data survives configuration changes.
+
+#T
+android
+
+#Q
+What are the advantages of Room Database over SQLite Database in Android?
+
+#A
+Compile-time verification of SQL queries.
+
+Less boilerplate code.
+
+Easy integration with LiveData and RxJava.
+
+#T
+android, jetpack, room
+
+#Q
+What is services and its types?
+
+#A
+In Android, a Service is a component that performs long-running operations in the background and does not provide a user interface. There are three main types of services: Started Services, Bound Services, and Foreground Services.
+
+#T
+android
+
+#Q
+Do services run on main thread?
+
+#A
+Yes
+
+#T
+android
+
+#Q
+How work manager work?
+
+#A
+TODO
+
+#Q
+What is the difference between Hilt @Provides and @Binds?
+
+#A
+TODO
+
+#T
+android, jetpack, hilt, DI
+
+#Q
+What are different scopes of Coroutines?
+
+#A
+Dispatcher.Default, Dispatcher.Main, Dispatcher.IO
+
+#E
+`Dispatchers.Default` coroutine scope is optimized for CPU-intensive tasks such as sorting large lists or performing complex calculations, as it uses a shared pool of threads specifically designed for such operations.  
+
+`Dispatcher.Main` is confined to the main thread of the application. It is used for tasks that interact with the UI, such as updating views or handling user actions, as it ensures that these operations are performed on the main thread.
+
+`Dispatchers.IO` is designed for offloading blocking IO tasks to a shared pool of threads. It is optimized for operations like network requests, file I/O, or database operations, where the tasks are mostly waiting for external resources and not CPU-intensive. This allows for efficient management of resources by freeing up the main thread for other work.
+
+#T
+kotlin, couroutines
+
+#Q
+What is difference between SharedPreferences and DataStore?
+
+#A
+SharedPreferences is a synchronous API for storing key-value pairs, while DataStore is an asynchronous and more scalable solution for managing data.
+
+#E
+`SharedPreferences` and `DataStore` are both used for storing key-value pairs in Android, but they have some significant differences:
+
+1. **Synchronous vs Asynchronous**:
+    - `SharedPreferences` is a synchronous API, which means it performs read and write operations on the main thread. This can lead to performance issues if the operations are heavy.
+    - `DataStore` is asynchronous, using Kotlin coroutines, which makes it more suitable for handling data without blocking the main thread.
+2. **Thread Safety**:
+    - `SharedPreferences` requires careful management to ensure thread safety, especially when making changes to the values.
+    - `DataStore`, being coroutine-based, handles concurrency more gracefully and safely.
+3. **Data Management**:
+    - `SharedPreferences` is suitable for simple data storage needs.
+    - `DataStore`, with its support for `Preferences` and `Proto DataStore`, is more scalable and can handle more complex data structures.
+
+**Example**:
+
+Using `SharedPreferences`:
+
+```kotlin
+val sharedPreferences = getSharedPreferences("example", Context.MODE_PRIVATE)
+val editor = sharedPreferences.edit()
+editor.putString("key", "value")
+editor.apply()
+
+```
+
+Using `DataStore`:
+
+```kotlin
+val dataStore: DataStore<Preferences> = createDataStore(name = "settings")
+val exampleKey = stringPreferencesKey("key")
+
+runBlocking {
+    dataStore.edit { settings ->
+        settings[exampleKey] = "value"
+    }
+}
+
+```
+
+In summary, `DataStore` is the preferred choice for modern Android applications due to its asynchronous nature, scalability, and better handling of data consistency.
+
+#T
+android, jetpack, dataStore
+

@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import QuestionAndAnswer from '../models/QuestionAndAnswer';
 
+export const tags: string[] = []
+
+export const questions: QuestionAndAnswer[] = []
+
 const useParseTxtFile = (filePath: string) => {
   const [data, setData] = useState<QuestionAndAnswer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,6 +54,8 @@ const useParseTxtFile = (filePath: string) => {
       // Extract optional tags
       const tagsMatch = block.match(/#T([\s\S]*)/);
       if (tagsMatch) obj.tags = tagsMatch[1]?.trim().split(/\s+/);
+
+      console.log(obj);
 
       return obj;
     });

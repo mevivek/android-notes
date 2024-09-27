@@ -11,7 +11,7 @@ export default function AndroidQnA() {
         <div className={styles.parent}>
             {data && data.map((qna: QuestionAndAnswer, index: number) => (
                 <div>
-                    <QnA key={index} question={qna.question} answer={qna.answer} explanation={qna.explanation} />
+                    <QnA key={index} qna={qna} />
                     <div className={styles.spacer} />
                 </div>
             ))}
