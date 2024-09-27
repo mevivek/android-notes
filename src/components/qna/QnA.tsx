@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './QnA.module.css';
 import { FaPlay } from 'react-icons/fa6';
+import Markdown from 'react-markdown';
 
 interface QnAProps {
   question: string;
@@ -27,7 +28,9 @@ export default function QnA({ question, answer, explanation }: QnAProps) {
         </div>
         <div style={{ marginLeft: '8px' }}>
           <div className={styles.answer}>{answer}</div>
-          {isExpanded && <div className={styles.explanation}>{explanation}</div>}
+          {isExpanded && <div className={styles.explanation}>
+            <Markdown>{explanation}</Markdown>
+          </div>}
         </div>
       </div>
     </div>
