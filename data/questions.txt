@@ -594,3 +594,435 @@ suspend fun fetchData(): String {
 
 #T
 kotlin, coroutines
+  
+#Q  
+Explain the **Activity** and **Fragment** lifecycles in Android.  
+
+#A  
+The **Activity** lifecycle consists of several callback methods like `onCreate()`, `onStart()`, `onResume()`, `onPause()`, `onStop()`, `onDestroy()`, and `onRestart()`. Each of these methods is called at different stages of the Activity’s life, controlling its visible state and interaction with the user.
+
+The **Fragment** lifecycle, on the other hand, includes both Activity lifecycle methods and additional fragment-specific methods like `onAttach()`, `onCreateView()`, `onActivityCreated()`, `onDetach()`, and `onDestroyView()`. The Fragment’s lifecycle is closely tied to the Activity’s lifecycle.
+
+#E  
+In Android, managing the lifecycle of an **Activity** is crucial because it defines how the app responds to different user actions and system events like configuration changes or backgrounding. 
+
+**Activity Lifecycle**: 
+- `onCreate()` is called when the Activity is first created. You should initialize views and setup resources here. 
+- `onStart()` signals that the Activity is becoming visible to the user.
+- `onResume()` is when the Activity starts interacting with the user, and the app is in the foreground.
+- `onPause()` occurs when the Activity is partially obscured, often due to another Activity launching in the foreground.
+- `onStop()` indicates that the Activity is no longer visible and may be followed by `onRestart()` if the Activity comes back to the foreground.
+- `onDestroy()` is the final call before the Activity is completely destroyed and can be triggered by either the user or the system to free up memory.
+
+**Fragment Lifecycle**: 
+- **Fragment** has additional lifecycle methods to handle fragment-specific behaviors, such as `onAttach()` when the fragment is first associated with an Activity and `onCreateView()` when it’s time to draw its UI. 
+- `onDestroyView()` is where you clean up the view-related resources. Finally, `onDetach()` is called when the Fragment is fully detached from the Activity.
+
+Understanding these lifecycles helps in managing memory more effectively, ensuring proper resource handling, and preventing memory leaks, especially during state changes like orientation shifts or navigating between screens.
+
+#T  
+android, fragment, activity
+
+
+  
+#Q  
+What are the key differences between an **Activity** and a **Fragment**?  
+
+#A  
+- **Activity** is a standalone component representing a single screen of the app, whereas a **Fragment** is a reusable UI component that can be embedded inside an Activity.
+- **Activity** has its own lifecycle that is independent of other components, while **Fragment** lifecycle is closely tied to the Activity's lifecycle and cannot exist independently.
+- **Activity** usually represents a complete UI, but **Fragment** is part of the UI, which can be used to build dynamic and flexible UIs by combining multiple fragments within an Activity.
+
+#E  
+The **Activity** is one of the core components of an Android app, responsible for managing the overall app's UI and interacting with the system. Activities control entire screens, handle system-level events like pressing the back button, and work as the primary entry point when the user launches an app.
+
+- **Activity**: It manages the overall navigation and state transitions of an app, like starting, pausing, and stopping the application. Activities are heavyweight in terms of memory consumption, so too many activities can impact performance.
+
+**Fragment**, on the other hand, is a smaller, reusable piece of an Activity’s UI that can help modularize the interface. By splitting complex UIs into multiple fragments, you can reuse them in different parts of the app, improving flexibility. For example, on a tablet, you can show multiple fragments side-by-side in one Activity, but on a phone, you might only show one fragment at a time in the same Activity.
+
+- **Fragment**: It’s meant to be hosted inside an Activity, and its lifecycle depends on the Activity’s state. However, Fragments allow for better management of device configurations (like switching from portrait to landscape), reducing the need to restart an entire Activity for small changes.
+
+In short, while Activities are self-contained units of interaction with the user, Fragments offer a more modular and efficient way to build multi-pane or dynamic UIs by embedding them within an Activity.
+
+#T  
+android, fragment, activity, UI, lifecycle, kotlin 
+
+
+  
+#Q  
+What are the pros and cons of using **a single Activity with multiple Fragments** versus **multiple Activities** in an Android application?  
+
+#A  
+- **Single Activity with multiple Fragments**:
+  - **Pros**: Easier state management, smoother navigation transitions, more modular UI, and reduced overhead in creating/destroying Activities.
+  - **Cons**: Requires more complex code to manage fragment transactions and backstack, and more careful handling of lifecycle events.
+
+- **Multiple Activities**:
+  - **Pros**: Simpler architecture, straightforward lifecycle management, easier to manage separate screens.
+  - **Cons**: Heavier on memory usage, more overhead in managing activity transitions, and may lead to slower performance with multiple screens.
+
+#E  
+In Android development, choosing between using a **single Activity with multiple Fragments** or **multiple Activities** depends on your app’s architecture, performance considerations, and UI complexity.
+
+- **Single Activity with multiple Fragments**:  
+  This approach is becoming more common, especially with modern Android architecture like the Navigation Component. Using a single Activity helps in building a more modular and dynamic UI. Since **Fragments** are lightweight, they are ideal for handling different parts of the UI in a single Activity, offering the advantage of smoother transitions and better memory management because you’re not constantly creating and destroying Activities.
+
+  - **Pros**:
+    - Easier to share data between Fragments via a shared `ViewModel`.
+    - Managing the navigation flow can be smoother, especially with transitions between screens handled as fragment transactions.
+    - Improves performance by reducing the cost of creating and destroying multiple Activities.
+    - Allows for more complex layouts, like tablets with multiple fragments on a single screen, offering flexibility for different screen sizes.
+  
+  - **Cons**:
+    - Managing fragment transactions (adding, replacing, removing Fragments) can get complicated, especially with the backstack and lifecycle management. You need to handle navigation carefully to avoid fragment overlapping or memory leaks.
+    - More developer effort is required to handle lifecycle events, such as restoring fragment state on configuration changes.
+
+- **Multiple Activities**:  
+  This is a more traditional approach, where each screen is represented by a separate Activity. It's easier for developers to manage, as each Activity is self-contained, and the Android system automatically manages their lifecycle, providing a clean separation between UI screens.
+
+  - **Pros**:
+    - Simpler architecture, as each screen has its own lifecycle and is independent of others.
+    - Navigation between Activities is more straightforward, especially for smaller or less complex apps.
+    - Easier to handle lifecycle events since Android automatically handles Activity recreation and state restoration.
+  
+  - **Cons**:
+    - Heavier on memory usage since each Activity involves more overhead.
+    - Transitioning between Activities can be slower, leading to less smooth user experience, particularly in complex navigation flows.
+    - Sharing data between Activities is more challenging and often requires passing data through intents or using shared storage (e.g., `SharedPreferences` or `ViewModel` across Activities).
+
+In conclusion, using **multiple Fragments within a single Activity** provides a more modern, modular, and efficient architecture for apps with complex UIs, while **multiple Activities** may still be suitable for simpler applications or those where you want a clear separation between different parts of the app.
+
+#T  
+android, fragment, activity, UI, lifecycle, kotlin, architecture 
+
+
+  
+#Q  
+What is the difference between **add** and **replace** when dealing with Fragments in Android?  
+
+#A  
+- **add**: Adds a new fragment to the container without removing the existing fragment(s). The existing fragments remain active in the background.
+- **replace**: Replaces the current fragment in the container by removing any existing fragment(s) before adding the new one. This ensures only one fragment is visible in the container at a time.
+
+#E  
+When dealing with fragment transactions in Android, understanding the difference between **add** and **replace** is crucial to managing your UI components effectively.
+
+- **add**:  
+  When you use `add()` to insert a Fragment into a container, the existing Fragment remains in the container, and the new Fragment is added on top of it. This approach is useful when you want to stack Fragments (e.g., using a backstack) or when you need multiple fragments on the screen simultaneously. However, this method does not remove the previous Fragment, which means it remains in memory and can affect performance if not managed carefully.
+
+  For example, when you add a fragment without removing the previous one:
+  ```kotlin
+  fragmentManager.beginTransaction()
+      .add(R.id.fragment_container, newFragment)
+      .commit()
+  ```
+
+- **replace**:  
+  Using `replace()` removes the currently attached Fragment from the container before adding the new one. This method is cleaner if you only want one Fragment to be displayed at a time and ensures that the old Fragment is destroyed (including its view hierarchy). This can free up memory and simplify the backstack management, as only one Fragment is visible at any given time.
+
+  Here's how it works:
+  ```kotlin
+  fragmentManager.beginTransaction()
+      .replace(R.id.fragment_container, newFragment)
+      .commit()
+  ```
+
+  With `replace()`, you effectively clear the previous Fragment from the container before adding a new one, making the transition cleaner when only one fragment is needed. This can improve memory usage since the old Fragment is no longer retained.
+
+**Key Differences**:
+- **add()** is used when you want to keep the current Fragment active and layer a new one over it or alongside it.
+- **replace()** is used when you want to completely remove the current Fragment and show only the new one in its place.
+
+In summary, `add()` should be used when you’re managing multiple Fragments and want them to co-exist, while `replace()` is better suited for swapping Fragments where only one should be displayed at a time.
+
+#T  
+android, fragment, lifecycle, UI, fragment transactions, kotlin
+
+
+  
+#Q  
+Explain the lifecycle behavior when using **add** vs **replace** for Fragments in Android.  
+
+#A  
+- When using **add**: The newly added fragment goes through the full lifecycle (`onAttach()`, `onCreate()`, `onCreateView()`, `onStart()`, `onResume()`), while the existing fragment remains in the background, staying paused (`onPause()`), but still in memory.
+- When using **replace**: The current fragment goes through `onPause()`, `onStop()`, `onDestroyView()`, and is fully removed. The new fragment then goes through the entire lifecycle, starting from `onAttach()`.
+
+#E  
+The lifecycle behavior of fragments in Android depends on whether you're using **add** or **replace** during fragment transactions. Both methods impact how the fragments transition between states and what lifecycle events they trigger.
+
+### When using **add**:
+- The **existing fragment** (if any) remains in memory but is moved to a background state. This means it will call `onPause()`, but it does not go through the destruction lifecycle methods (`onStop()` or `onDestroyView()`). The existing fragment can be resumed later when the new fragment is removed from the stack. This is commonly used when you want to layer fragments on top of each other or maintain fragments in the backstack for smooth navigation.
+  
+- The **newly added fragment** goes through the complete lifecycle starting from `onAttach()`, `onCreate()`, `onCreateView()`, and `onResume()`. Both fragments are now in memory, but only the added fragment is visible.
+
+  Lifecycle example:
+  1. Old Fragment: `onPause()`
+  2. New Fragment: `onAttach()`, `onCreate()`, `onCreateView()`, `onStart()`, `onResume()`
+
+### When using **replace**:
+- The **existing fragment** goes through a full removal process. This starts with `onPause()`, followed by `onStop()`, and then `onDestroyView()`. Depending on whether you add the fragment to the backstack, it may also go through `onDestroy()` and `onDetach()`. Essentially, the old fragment is destroyed, freeing up resources. It won’t be restored unless explicitly added back later.
+
+- The **new fragment** goes through the entire lifecycle starting with `onAttach()` and moves through `onCreate()`, `onCreateView()`, `onStart()`, and `onResume()`. Since the old fragment has been fully removed, only the new fragment is active.
+
+  Lifecycle example:
+  1. Old Fragment: `onPause()`, `onStop()`, `onDestroyView()`, `onDestroy()`, `onDetach()`
+  2. New Fragment: `onAttach()`, `onCreate()`, `onCreateView()`, `onStart()`, `onResume()`
+
+### Key Differences in Lifecycle Behavior:
+- **add** keeps the existing fragment alive, only pausing it, which means it can be resumed later without needing to be recreated.
+- **replace** destroys the existing fragment, ensuring that its resources are released, while the new fragment takes over, going through a full lifecycle.
+
+### Practical Implications:
+- **add** is useful when you need to stack fragments or maintain their state in memory for later retrieval. However, you must manage memory carefully as multiple fragments remain in memory.
+- **replace** is ideal for swapping out fragments completely, especially when managing memory and ensuring only the active fragment occupies resources. It simplifies backstack management by ensuring no "hidden" fragments are left behind.
+
+#T  
+android, fragment, lifecycle, fragment transactions, memory management, UI, kotlin
+
+
+  
+#Q  
+What is a **ViewModel** in Android, and how does it persist data during Activity recreation?  
+
+#A  
+A **ViewModel** in Android is a class designed to store and manage UI-related data in a lifecycle-conscious way. It allows data to survive configuration changes like screen rotations, ensuring the data persists without being destroyed alongside the Activity or Fragment. The **ViewModel** works by staying in memory as long as the corresponding lifecycle owner (Activity or Fragment) is alive, making it ideal for handling UI-related logic without tying it directly to the Activity lifecycle.
+
+#E  
+In Android development, one of the common challenges is handling **configuration changes**, such as when a user rotates the screen. During these events, the Activity is recreated, which means that all of its instance variables are lost unless they are explicitly saved and restored. This is where **ViewModel** comes into play.
+
+### What is a **ViewModel**?  
+A **ViewModel** is part of the **Android Architecture Components** and is specifically designed to store and manage UI-related data in a lifecycle-aware manner. It is tied to an Activity or Fragment, but it outlives configuration changes. This means that while an Activity is recreated during events like screen rotations, the ViewModel persists, keeping your data intact.
+
+Key features of **ViewModel**:
+- **Lifecycle-aware**: It is scoped to the lifecycle of the Activity or Fragment and remains in memory until that lifecycle is permanently destroyed (e.g., when the user navigates back or the app is killed).
+- **Survives configuration changes**: Since the ViewModel does not get destroyed on configuration changes, it ensures that the UI-related data, such as form inputs or data fetched from a database, remains intact.
+
+### How does **ViewModel** persist data?  
+The **ViewModel** survives configuration changes like screen rotations by being tied to the **ViewModelStoreOwner**, which is the Activity or Fragment. When an Activity is recreated, the ViewModel is not recreated. Instead, the old ViewModel instance is provided again by the system.
+
+For example, when you declare a ViewModel:
+```kotlin
+class MyViewModel : ViewModel() {
+    var counter: Int = 0
+}
+```
+And use it inside your Activity or Fragment:
+```kotlin
+val myViewModel: MyViewModel by viewModels()
+```
+This ViewModel will persist the `counter` value even if the screen is rotated or the Activity is destroyed and recreated.
+
+Here’s how it works internally:
+- When the Activity is recreated due to a configuration change, the system checks if a ViewModel already exists for that Activity/Fragment.
+- If the ViewModel exists, it is retained, and the newly recreated Activity is given the existing instance.
+- If no ViewModel exists (like when the Activity is first created), a new instance of the ViewModel is created.
+
+### Data Persistence Process:
+1. **Activity recreation**: When an Activity is recreated due to a configuration change, its internal state (UI and instance variables) is lost.
+2. **ViewModel retention**: The ViewModel, however, is retained in memory. This is possible because the system uses a **ViewModelStore**, which manages the ViewModel lifecycle independently of the Activity or Fragment.
+3. **Providing existing data**: After the Activity is recreated, the same ViewModel instance is provided, so any data it holds (e.g., form inputs, API responses) remains unchanged and is available for use.
+
+Thus, **ViewModel** helps solve the problem of persisting UI-related data in a way that is lifecycle-aware, allowing for better user experiences and more efficient memory management.
+
+#T  
+android, viewmodel, lifecycle, data persistence, configuration changes, UI, architecture, kotlin
+
+
+#Q  
+What are the differences between **LiveData** and **StateFlow/Flow** in Android?
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+How can you use **StateFlow** in a lifecycle-aware manner in Android?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What are **Kotlin extension functions**, and how do they enhance Kotlin programming?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+How does **LiveData** work internally in Android?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What is a **sealed class** in Kotlin, and where would you use it?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What is a **data class** in Kotlin? Can you make a data class **open**?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What are Kotlin **scope functions** and how do they differ from each other (e.g., `let`, `apply`, `also`, etc.)?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What is the difference between **lazy** and **lateinit** in Kotlin?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+Are **lazy** variables in Kotlin thread-safe?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What is a **Kotlin object**, and where should you use it?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What is the difference between a **companion object** and a regular **object** in Kotlin?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What is the difference between **launch** and **async** in Kotlin Coroutines?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+How does **coroutine cancellation** work in Kotlin?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What is a **coroutine exception handler**, and how does it work in Kotlin?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What happens when a **child coroutine** fails in Kotlin? How does it affect the parent coroutine?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What is a **SupervisorJob** in Kotlin Coroutines, and how is it different from a regular Job?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What are the key differences between **XML** and **Jetpack Compose** for UI design in Android?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+What is the **view hierarchy** in Android, and how does it affect performance?  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+Explain the **view lifecycle** in Android.  
+
+#A  
+
+#E  
+
+#T  
+
+
+#Q  
+How can you optimize a **RecyclerView** for better performance in Android?  
+
+#A  
+
+#E  
+
+#T  
